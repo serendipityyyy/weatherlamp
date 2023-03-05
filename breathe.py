@@ -9,7 +9,7 @@ headers = {
 data = {
     "period": 2,
     "cycles": 5,
-    "color": "green",
+    "color": "blue",
 }
 
 response = requests.post('https://api.lifx.com/v1/lights/all/effects/breathe', data=data, headers=headers)
