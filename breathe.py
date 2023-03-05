@@ -7,8 +7,8 @@ headers = {
 }
 
 data = {
-    "period": 2,
-    "cycles": 5,
+    "period": 8,
+    "cycles": 15,
     "color": "blue",
 }
 
