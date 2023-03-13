@@ -31,8 +31,25 @@ def set_lights_to_off():
     response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, headers=headers)
     print(response)
 
-while True:
+def set_lights_to_red():
+    """
+    Set all lights to red
+    :return:
+    """
+    payload = {
+        "power": "on",
+        "color": "red"
+    }
+    response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, headers=headers)
+    print(response)
+
+
+for i in range(20):
     set_lights_to_blue()
+    time.sleep(2)
+    set_lights_to_off()
+    time.sleep(2)
+    set_lights_to_red()
     time.sleep(2)
     set_lights_to_off()
     time.sleep(2)
