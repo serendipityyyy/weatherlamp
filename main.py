@@ -77,11 +77,11 @@ def set_color_from_weather_condition(temperature, precipitation):
     if precipitation > 0:
         set_lights_to_teal()
     elif precipitation == 0:
-        if temperature < 70:
+        if temperature < 66:
             set_lights_to_blue()
-        elif temperature > 70:
+        elif temperature > 66:
             set_lights_to_red()
-        elif temperature == 70:
+        elif temperature == 66:
             set_lights_to_purple()
 
 
