@@ -94,7 +94,7 @@ def get_percent_of_precipitation():
 
 temperature = get_temperature()
 precipitation = get_percent_of_precipitation()
-print(f"The temperature is: {temperature}, and the precipitation chance is {precipitation})
+print(f"The temperature is: {temperature}, and the precipitation chance is {precipitation}")
 set_color_from_weather_condition(temperature, precipitation)
 
 
