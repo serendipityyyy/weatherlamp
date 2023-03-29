@@ -1,10 +1,16 @@
 import requests
 import time
-
-token = "cad51ac2161cb093ec6226896055acd362f92e39fb97da8f5b4db8efac490e22"
+import configparser
+config = configparser.ConfigParser()
+config.sections()
+config.read('config.ini')
+TOKEN = config['DEFAULT']['LIFXAPIkey']
+WEATHER_STATION = config['WEATHER']['Station']
+WEATHER_LATITUDE = config['WEATHER']["Latitude"]
+WEATHER_LONGITUDE = config['WEATHER']['Longitude']
 
 headers = {
-    "Authorization": "Bearer %s" % token,
+    "Authorization": "Bearer %s" % TOKEN,
 }
 
 def set_lights_to_blue():
@@ -68,7 +74,7 @@ def set_lights_to_teal():
     print(response)
 
 def get_temperature():
-    response = requests.get('https://api.weather.gov/gridpoints/EWX/157,100/forecast')
+    response = requests.get(f"https://api.weather.gov/gridpoints/{WEATHER_STATION}/{WEATHER_LATITUDE},{WEATHER_LONGITUDE}/forecast")
     temperature = response.json()['properties']['periods'][0]['temperature']
     return temperature
 
