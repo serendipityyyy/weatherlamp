@@ -1,9 +1,12 @@
 import requests
+import configparser
 
-token = "[[app:Token]]"
+config = configparser.ConfigParser()
+config.read('config.ini')
+TOKEN = config['DEFAULT']['LIFXAPIkey']
 
 headers = {
-    "Authorization": "Bearer %s" % token,
+    "Authorization": "Bearer %s" % TOKEN,
 }
 
 data = {

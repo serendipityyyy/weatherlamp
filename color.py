@@ -1,10 +1,17 @@
 import requests
 import time
+import configparser
 
-token = "c63c17d3573e5d7898bdbcd90497498ccad22223fe8bdf0fac58db372aa097cc"
+config = configparser.ConfigParser()
+config.read('config.ini')
+TOKEN = config['DEFAULT']['LIFXAPIkey']
+WEATHER_STATION = config['WEATHER']['Station']
+WEATHER_LATITUDE = config['WEATHER']["Latitude"]
+WEATHER_LONGITUDE = config['WEATHER']['Longitude']
+
 
 headers = {
-    "Authorization": "Bearer %s" % token,
+    "Authorization": "Bearer %s" % TOKEN,
 }
 
 def set_lights_to_blue():
@@ -55,22 +62,70 @@ def set_lights_to_purple():
     response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, headers=headers)
     print(response)
 
+def set_lights_to_teal():
+    """
+    Set all lights to teal
+    :return:
+    """
+    payload = {
+        "power": "on",
+        "color": "2D7F9D"
+    }
+    response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, headers=headers)
+    print(response)
+
 def get_temperature():
-    response = requests.get('https://api.weather.gov/gridpoints/EWX/157,100/forecast')
+    response = requests.get(f'https://api.weather.gov/gridpoints/{WEATHER_STATION}/{WEATHER_LATITUDE},{WEATHER_LONGITUDE}/forecast')
     temperature = response.json()['properties']['periods'][0]['temperature']
     return temperature
 
-def set_color_from_temp(temperature):
-    if temperature < 70:
-        set_lights_to_blue()
-    elif temperature > 70:
-        set_lights_to_red()
-    elif temperature == 70:
-        set_lights_to_purple()
+def set_color_from_weather_condition(temperature, precipitation):
+    if precipitation > 0:
+        set_lights_to_teal()
+    elif precipitation == 0:
+        if temperature < 70:
+            set_lights_to_blue()
+        elif temperature > 70:
+            set_lights_to_red()
+        elif temperature == 70:
+            set_lights_to_purple()
 
-for i in range(60, 81):
-    print(f"The temperature is: {i}")
-    set_color_from_temp(i)
+
+def get_percent_of_precipitation():
+    response = requests.get(f'https://api.weather.gov/gridpoints/{WEATHER_STATION}/{WEATHER_LATITUDE},{WEATHER_LONGITUDE}/forecast')
+    precipitation = response.json()['properties']['periods'][0]['probabilityOfPrecipitation']['value']
+    if precipitation == None:
+        precipitation = 0
+    return precipitation
+
+weather_conditions = [
+    {
+        "temperature": 40,
+        "precipitation": 0
+    },
+    {
+        "temperature": 80,
+        "precipitation": 70
+    },
+    {
+        "temperature": 70,
+        "precipitation": 5
+    },
+    {
+        "temperature": 60,
+        "precipitation": 0
+    },
+    {
+        "temperature": 100,
+        "precipitation": 0
+    },
+]
+
+for weather_condition in weather_conditions:
+    temperature = weather_condition["temperature"]
+    precipitation = weather_condition["precipitation"]
+    print(f"The temperature is: {temperature}, precipitation chance is {precipitation}")
+    set_color_from_weather_condition(temperature, precipitation)
     time.sleep(3)
 
 

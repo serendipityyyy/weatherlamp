@@ -2,7 +2,6 @@ import requests
 import time
 import configparser
 config = configparser.ConfigParser()
-config.sections()
 config.read('config.ini')
 TOKEN = config['DEFAULT']['LIFXAPIkey']
 WEATHER_STATION = config['WEATHER']['Station']
