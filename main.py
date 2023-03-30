@@ -91,7 +91,7 @@ def set_color_from_weather_condition(temperature, precipitation):
 
 
 def get_percent_of_precipitation():
-    response = requests.get('https://api.weather.gov/gridpoints/EWX/157,100/forecast')
+    response = requests.get(f'https://api.weather.gov/gridpoints/{WEATHER_STATION}/{WEATHER_LATITUDE},{WEATHER_LONGITUDE}/forecast')
     precipitation = response.json()['properties']['periods'][0]['probabilityOfPrecipitation']['value']
     if precipitation == None:
         precipitation = 0
