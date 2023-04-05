@@ -1,6 +1,11 @@
 import requests
 import time
 import configparser
+from lights import set_lights_to_blue
+from lights import set_lights_to_off
+from lights import set_lights_to_red
+from lights import set_lights_to_purple
+from lights import set_lights_to_teal
 config = configparser.ConfigParser()
 config.read('config.ini')
 TOKEN = config['DEFAULT']['LIFXAPIkey']
@@ -12,65 +17,6 @@ headers = {
     "Authorization": "Bearer %s" % TOKEN,
 }
 
-def set_lights_to_blue():
-    """
-    Set all lights to blue
-    :return:
-    """
-    payload = {
-        "power": "on",
-        "color": "blue"
-    }
-    response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, headers=headers)
-    print(response)
-
-
-def set_lights_to_off():
-    """
-    Turn off all lights
-    :return:
-    """
-    payload = {
-        "power": "off",
-    }
-    response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, headers=headers)
-    print(response)
-
-def set_lights_to_red():
-    """
-    Set all lights to red
-    :return:
-    """
-    payload = {
-        "power": "on",
-        "color": "red"
-    }
-    response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, headers=headers)
-    print(response)
-
-def set_lights_to_purple():
-    """
-    Set all lights to purple
-    :return:
-    """
-    payload = {
-        "power": "on",
-        "color": "purple"
-    }
-    response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, headers=headers)
-    print(response)
-
-def set_lights_to_teal():
-    """
-    Set all lights to teal
-    :return:
-    """
-    payload = {
-        "power": "on",
-        "color": "2D7F9D"
-    }
-    response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, headers=headers)
-    print(response)
 
 def get_temperature():
     response = requests.get(f"https://api.weather.gov/gridpoints/{WEATHER_STATION}/{WEATHER_LATITUDE},{WEATHER_LONGITUDE}/forecast")
@@ -83,11 +29,12 @@ def set_color_from_weather_condition(temperature, precipitation):
         set_lights_to_teal()
     elif precipitation == 0:
         if temperature < 66:
-            set_lights_to_blue()
+            set_lights_to_blue(TOKEN)
         elif temperature > 66:
             set_lights_to_red()
         elif temperature == 66:
             set_lights_to_purple()
+
 
 
 def get_percent_of_precipitation():
@@ -101,6 +48,8 @@ temperature = get_temperature()
 precipitation = get_percent_of_precipitation()
 print(f"The temperature is: {temperature}, and the precipitation chance is {precipitation}")
 set_color_from_weather_condition(temperature, precipitation)
+time.sleep(5)
+set_lights_to_off()
 
 
 
