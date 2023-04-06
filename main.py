@@ -33,5 +33,5 @@ temperature = get_temperature(WEATHER_STATION, WEATHER_LATITUDE, WEATHER_LONGITU
 precipitation = get_percent_of_precipitation(WEATHER_STATION, WEATHER_LATITUDE, WEATHER_LONGITUDE)
 print(f"The temperature is: {temperature}, and the precipitation chance is {precipitation}")
 set_color_from_weather_condition(temperature, precipitation)
-time.sleep(5)
+time.sleep(3600)
 set_lights_to_off(TOKEN)
